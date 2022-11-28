@@ -29,23 +29,16 @@ func main() {
 	}
 	defer profiler.Stop()
 	http.HandleFunc("/", func(writer http.ResponseWriter, request *http.Request) {
-		wait1()
+		randomListSort(1000000)
 		writer.Write([]byte("Hello"))
-		wait2()
+		randomListSort(500000)
 	})
 	http.ListenAndServe("localhost:8080", nil)
 }
 
-func wait1() {
+func randomListSort(len int) {
 	var numList = make([]float64, 0)
-	for i := 0; i < 10000000; i++ {
-		numList = append(numList, rand.Float64())
-	}
-	sort.Float64s(numList)
-}
-func wait2() {
-	var numList = make([]float64, 0)
-	for i := 0; i < 5000000; i++ {
+	for i := 0; i < len; i++ {
 		numList = append(numList, rand.Float64())
 	}
 	sort.Float64s(numList)
