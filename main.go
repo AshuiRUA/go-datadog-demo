@@ -28,15 +28,29 @@ func main() {
 		log.Fatal(err)
 	}
 	defer profiler.Stop()
-	http.HandleFunc("/", func(writer http.ResponseWriter, request *http.Request) {
-		randomListSort(1000000)
-		writer.Write([]byte("Hello"))
-		randomListSort(500000)
+	http.HandleFunc("/callOneFunc", func(writer http.ResponseWriter, request *http.Request) {
+		randomDoubleSort(1000000)
+		writer.Write([]byte("call one func"))
+		randomDoubleSort(500000)
+	})
+
+	http.HandleFunc("/callTwoFunc", func(writer http.ResponseWriter, request *http.Request) {
+		randomIntSort(1000000)
+		writer.Write([]byte("call Two func"))
+		randomDoubleSort(500000)
 	})
 	http.ListenAndServe("localhost:8080", nil)
 }
 
-func randomListSort(len int) {
+func randomIntSort(len int) {
+	var numList = make([]int, 0)
+	for i := 0; i < len; i++ {
+		numList = append(numList, rand.Int())
+	}
+	sort.Ints(numList)
+}
+
+func randomDoubleSort(len int) {
 	var numList = make([]float64, 0)
 	for i := 0; i < len; i++ {
 		numList = append(numList, rand.Float64())
