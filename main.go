@@ -9,6 +9,7 @@ import (
 	"math/rand"
 	"net/http"
 	_ "net/http/pprof"
+	"os/exec"
 	"sort"
 )
 
@@ -63,6 +64,14 @@ func main() {
 	})
 	go func() {
 		log.Println(http.ListenAndServe("localhost:6060", nil))
+	}()
+	go func() {
+		command := `./load.sh`
+		cmd := exec.Command("/bin/bash", "-c", command)
+		_, err := cmd.Output()
+		if err != nil {
+			log.Fatal(err)
+		}
 	}()
 	http.ListenAndServe(":8080", mux)
 }
